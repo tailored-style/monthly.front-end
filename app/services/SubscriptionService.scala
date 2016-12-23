@@ -1,17 +1,29 @@
 package services
 
-sealed class Size(val label: String) extends AnyVal
+import java.util.UUID
 
-class Sizes {
-  val extraSmall = new Size("XS")
-  val small = new Size("S")
-  val medium = new Size("M")
-  val large = new Size("L")
-  val extraLarge = new Size("XL")
-}
+import com.amazonaws.services.dynamodbv2.model.AttributeValue
+import com.amazonaws.services.dynamodbv2.{AmazonDynamoDB, AmazonDynamoDBClientBuilder}
 
-class SubscriptionService {
-  def create(name: String, size: Size, email: String): Unit = {
+import scala.concurrent.{ExecutionContext, Future}
 
+
+object SubscriptionService {
+  private val tableName = "tailored.monthly.subscriptions"
+
+  def create(name: String, size: String, email: String)(implicit executionContext: ExecutionContext): Future[Unit] = {
+    val item: java.util.Map[String, AttributeValue] = new java.util.HashMap[String, AttributeValue]()
+    item.put("ID", new AttributeValue(UUID.randomUUID().toString))
+    item.put("Name", new AttributeValue(name))
+    item.put("Email", new AttributeValue(email))
+    item.put("Size", new AttributeValue(size))
+
+    Future {
+      dynamoDbClient.putItem(tableName, item)
+    }
+  }
+
+  private var dynamoDbClient: AmazonDynamoDB = {
+    AmazonDynamoDBClientBuilder.standard().build()
   }
 }
