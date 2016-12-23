@@ -1,0 +1,61 @@
+@()
+
+@main("Subscribe") {
+  <h1>Subscribe to Tailored Style</h1>
+  <form action="/subscribe" method="post">
+    <h2>About You</h2>
+    <p>Name: <input name="name" type="text"></p>
+    <p>Shirt size:
+      <select name="shirt-size">
+        <option>XS</option>
+        <option>S</option>
+        <option selected="selected">M</option>
+        <option>L</option>
+        <option>XL</option>
+        <option>XXL</option>
+      </select>
+    </p>
+
+    <h2>Contact Details</h2>
+    <p>Email address: <input name="email" type="email"></p>
+    <p>SMS: <input name="sms-number" type="text"></p>
+
+    <h2>Shipping Address</h2>
+    <p>Full Name: <input name="address-name" type="text"></p>
+    <p>Address Line 1: <input name="address-line-1" type="text"></p>
+    <p>Address Line 2: <input name="address-line-2" type="text"></p>
+    <p>City: <input name="address-city" type="text" value="Vancouver"></p>
+    <p>Province: <select name="address-province">
+        <option>Alberta</option>
+        <option selected="selected">British Columbia</option>
+        <option>Prince Edward Island</option>
+        <option>Manitoba</option>
+        <option>Saskatchewan</option>
+        <option>Ontario</option>
+        <option>Quebec</option>
+        <option>Yukon</option>
+        <option>North West Territories</option>
+        <option>Nunavut</option>
+        <option>Newfoundland & Labrador</option>
+        <option>Nova Scotia</option>
+        <option>New Brunswick</option>
+      </select>
+    </p>
+    <p>Postal Code: <input name="address-postal-code" type="text"></p>
+    <p>Country: <input name="address-country" type="text" value="Canada" disabled="disabled"></p>
+
+    <h2>Payment</h2>
+    <p>Provide your payment information to start your subscription.</p>
+    <script
+      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+      data-key="pk_xBxOzA7AWHgOGSAbkyXd4MakpGLLm"
+      data-name="Tailored Style - Shirt of the Month"
+      data-description="Monthly Subscription. A month-by-month subscription to our Shirt of the Month.
+        You will be charged this amount on a recurring monthly basis."
+      data-currency="cad"
+      data-locale="en"
+      data-allow-remember-me="false"
+      data-panel-label="Subscribe">
+    </script>
+  </form>
+}
