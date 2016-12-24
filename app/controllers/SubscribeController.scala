@@ -12,10 +12,11 @@ import scala.concurrent.Future
   * Created by toby on 2016-12-20.
   */
 @Singleton
-class SubscribeController @Inject() extends Controller {
+class SubscribeController @Inject() (val configuration: play.api.Configuration) extends Controller {
 
   def index = Action { implicit request =>
-    Ok(views.html.subscribe())
+    val stripePublicKey = configuration.getString("stripe.publicKey")
+    Ok(views.html.subscribe(stripePublicKey.get))
   }
 
   def create = Action.async(parse.tolerantFormUrlEncoded) { implicit request =>

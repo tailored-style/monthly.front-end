@@ -1,4 +1,4 @@
-@()
+@(stripePublicKey: String)
 
 @main("Subscribe") {
   <h1>Subscribe to Tailored Style</h1>
@@ -53,7 +53,7 @@
     <p>Provide your payment information to start your subscription.</p>
     <script
         src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="pk_xBxOzA7AWHgOGSAbkyXd4MakpGLLm"
+        data-key="@stripePublicKey"
         data-name="Tailored Style - Shirt of the Month"
         data-description="Monthly Subscription. A month-by-month subscription to our Shirt of the Month.
           You will be charged this amount on a recurring monthly basis."
