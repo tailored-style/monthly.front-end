@@ -2,6 +2,7 @@ package services
 
 import java.util.UUID
 
+import com.amazonaws.regions.Regions
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.amazonaws.services.dynamodbv2.{AmazonDynamoDB, AmazonDynamoDBClientBuilder}
 import org.joda.time.format.ISODateTimeFormat
@@ -12,6 +13,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object SubscriptionService {
   private val tableName = "tailored.monthly.subscriptions"
+  private val dynamoDbRegion = Regions.US_WEST_2
 
   def create(
               name: String,
@@ -54,6 +56,8 @@ object SubscriptionService {
   }
 
   private var dynamoDbClient: AmazonDynamoDB = {
-    AmazonDynamoDBClientBuilder.standard().build()
+    AmazonDynamoDBClientBuilder.standard()
+        .withRegion(dynamoDbRegion)
+        .build()
   }
 }
