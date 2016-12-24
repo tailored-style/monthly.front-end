@@ -21,19 +21,18 @@ class SubscribeController @Inject() (val configuration: play.api.Configuration) 
 
   def create = Action.async(parse.tolerantFormUrlEncoded) { implicit request =>
     val formData = request.body
-    val oName = formData.get("name").map(_.head)
-    val oEmail = formData.get("email").map(_.head)
-    val oSize = formData.get("shirt-size").map(_.head)
-    val oSms = formData.get("sms-number").map(_.head)
-    val oAddressName = formData.get("address-name").map(_.head)
-    val oAddressLine1 = formData.get("address-line-1").map(_.head)
-    val oAddressLine2 = formData.get("address-line-2").map(_.head)
-    val oAddressCity = formData.get("address-city").map(_.head)
-    val oAddressProvince = formData.get("address-province").map(_.head)
-    val oAddressPostalCode = formData.get("address-postal-code").map(_.head)
-    val oAddressCountry = formData.get("address-country").map(_.head)
-    val oStripeToken = formData.get("stripeToken").map(_.head)
-    val oStripeEmail = formData.get("stripeEmail").map(_.head)
+    val oName = formData.get("name").map(_.head).filterNot(_.isEmpty)
+    val oEmail = formData.get("email").map(_.head).filterNot(_.isEmpty)
+    val oSize = formData.get("shirt-size").map(_.head).filterNot(_.isEmpty)
+    val oSms = formData.get("sms-number").map(_.head).filterNot(_.isEmpty)
+    val oAddressName = formData.get("address-name").map(_.head).filterNot(_.isEmpty)
+    val oAddressLine1 = formData.get("address-line-1").map(_.head).filterNot(_.isEmpty)
+    val oAddressLine2 = formData.get("address-line-2").map(_.head).filterNot(_.isEmpty)
+    val oAddressCity = formData.get("address-city").map(_.head).filterNot(_.isEmpty)
+    val oAddressProvince = formData.get("address-province").map(_.head).filterNot(_.isEmpty)
+    val oAddressPostalCode = formData.get("address-postal-code").map(_.head).filterNot(_.isEmpty)
+    val oAddressCountry = formData.get("address-country").map(_.head).filterNot(_.isEmpty)
+    val oStripeToken = formData.get("stripeToken").map(_.head).filterNot(_.isEmpty)
 
     if (oName.isEmpty) {
       Future.successful(BadRequest("Name must be provided"))
@@ -70,7 +69,7 @@ class SubscribeController @Inject() (val configuration: play.api.Configuration) 
       )
 
       f.map { _ =>
-        Ok(s"Subscription created: ${oName.getOrElse("Unknown")}")
+        Ok(views.html.thankyou(oName.get))
       }
     }
   }
