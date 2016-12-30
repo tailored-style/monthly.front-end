@@ -1,0 +1,185 @@
+@*
+ * This template is called from the `index` template. This template
+ * handles the rendering of the page header and body tags. It takes
+ * two arguments, a `String` for the title of the page and an `Html`
+ * object to insert into the body of the page.
+ *@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>@title</title>
+  <!-- CSS Links-->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/swiper.min.css">
+  <link rel="stylesheet" href="css/ion.tabs.css">
+  <link rel="stylesheet" href="css/pe-icon-7-stroke.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/elegant-icons.css">
+  <link rel="stylesheet" href="css/stroke-gap-icons.css">
+  <!-- Custom CSS-->
+  <link rel="stylesheet" href="style-B.css">
+</head>
+<body>
+<!-- PAGE PRELOADER -->
+<!--<div class="page-preloader-wrapper">-->
+  <!--<div class="page-preloader"><span class="page-preloader__square"></span><span class="page-preloader__square"></span><span class="page-preloader__square"></span><span class="page-preloader__square"></span></div>-->
+<!--</div>-->
+<!-- - PAGE PRELOADER -->
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <!-- logo -->
+  <div class="logo page-header__logo"><a class="logo__link" href="corporate-home.html"><span class="logo__text">TAILORED</span></a></div>
+  <!-- - logo -->
+  <!-- navigation -->
+  <nav class="page-header__navigation">
+    <!-- search form -->
+    <form class="form form_site-search" action="corporate-home.html" method="GET">
+      <div class="form-control form_site-search__control">
+        <input class="form-control__input form_site-search__input" type="text" placeholder="Input and press return...">
+      </div>
+    </form>
+    <!-- - search form -->
+    <!-- top level menu -->
+    <ul class="list-top-menu">
+      <li class="list-top-menu__item list-top-menu__item_submenu"><a class="list-top-menu__link" href="#">Home</a>
+        <!-- second level menu -->
+        <!--<ul class="list-submenu">-->
+          <!--<li class="list-submenu__item"><a class="list-submenu__link" href="corporate-home.html">Home 1 Multi Page</a></li>-->
+          <!--<li class="list-submenu__item"><a class="list-submenu__link" href="corporate-home_one-page.html">Home 2 One Page</a></li>-->
+        <!--</ul>-->
+        <!-- - second level menu -->
+      </li>
+      <li class="list-top-menu__item"><a class="list-top-menu__link" href="corporate-about-us.html">About us</a></li>
+      </li>
+      <li class="list-top-menu__item"><a class="list-top-menu__link" href="corporate-contact.html">Sign Up</a></li>
+    </ul>
+    <!-- - top level menu -->
+    <!-- side navigation -->
+    <ul class="list-side-nav">
+      <li class="list-side-nav__item"><a class="list-side-nav__search" id="js-search-toggle-button" href="#"></a></li>
+      <li class="list-side-nav__item"><a class="list-side-nav__burger" id="js-mobile-menu-button" href="#"></a></li>
+    </ul>
+    <!-- - side navigation -->
+  </nav>
+  <!-- - navigation -->
+</header>
+<!-- - PAGE HEADER -->
+<!-- PAGE MAIN -->
+<main class="page-main">
+  @content
+</main>
+<!-- - PAGE MAIN -->
+<!-- PAGE FOOTER -->
+<footer class="page-footer">
+  <!-- scroll to top button --><a class="button-to-top" id="js-button-to-top" href="#"></a>
+  <!-- - scroll to top button -->
+  <!-- footer content -->
+  <div class="page-footer__content">
+    <!-- footer block 1 -->
+    <div class="page-footer__block">
+      <h2 class="page-footer__heading">About Tailored</h2>
+      <p class="p">We started Tailored because we know technology is fundamentally changing the way people shop. Retail shops with rack after rack of made-for-everyone generic clothing, fitting rooms, and unhelpful staff are a relic of old times. We believe in a world where buying clothes is easier than ordering a coffee.<br>
+      <br>
+      Tailored is proudly Canadian.</p>
+      <div class="page-footer__social-buttons">
+        <ul class="list-social-buttons">
+          <li class="list-social-buttons__item"><a class="list-social-buttons__link" href="#"><i class="fa fa-facebook"></i></a></li>
+          <li class="list-social-buttons__item"><a class="list-social-buttons__link" href="#"><i class="fa fa-twitter"></i></a></li>
+          <li class="list-social-buttons__item"><a class="list-social-buttons__link" href="#"><i class="fa fa-instagram"></i></a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- - footer block 1 -->
+    <!-- footer block 2 -->
+    <div class="page-footer__block">
+      <h2 class="page-footer__heading">Contact info</h2>
+      <ul class="list-address page-footer__list-address">
+        <li class="list-address_item">Tailored</li>
+        <li class="list-address_item">Unit 802 - 999 Gilford St</li>
+        <li class="list-address_item">Vancouver, BC, V6G 2N8</li>
+        <li class="list-address_item">Canada</li>
+      </ul>
+      <ul class="list-address page-footer__list-address">
+        <li class="list-address_item">Phone: +1 (778) 688-1639</li>
+        <li class="list-address_item">Email: tobyjsullivan@@gmail.com</li>
+      </ul>
+    </div>
+    <!-- - footer block 2 -->
+  <!-- HIDDEN -->
+  <div style="display: none">
+    <!-- footer block 3 -->
+    <div class="page-footer__block">
+      <h2 class="page-footer__heading">Latest News</h2>
+      <ul class="list-news">
+        <li class="list-news__item"><a class="list-news__link" href="#">
+          <div class="news-item">
+            <h3 class="news-item__heading">Greco is the best template</h3>
+            <time class="news-item__date" datetime="2016-10-02">02 October, 2016</time><span class="news-item__comments-counter">10 Comments</span>
+          </div></a></li>
+        <li class="list-news__item"><a class="list-news__link" href="#">
+          <div class="news-item">
+            <h3 class="news-item__heading">We will help grow your business</h3>
+            <time class="news-item__date" datetime="2016-10-02">02 October, 2016</time><span class="news-item__comments-counter">10 Comments</span>
+          </div></a></li>
+        <li class="list-news__item"><a class="list-news__link" href="#">
+          <div class="news-item">
+            <h3 class="news-item__heading">Greco flexible & customizable</h3>
+            <time class="news-item__date" datetime="2016-10-02">02 October, 2016</time><span class="news-item__comments-counter">10 Comments</span>
+          </div></a></li>
+      </ul>
+    </div>
+    <!-- - footer block 3 -->
+    <!-- footer block 4 -->
+    <div class="page-footer__block">
+      <h2 class="page-footer__heading">Flickr stream</h2>
+      <ul class="list-flickr">
+        <li class="list-flickr__item"><a class="list-flickr__link" href="#"><img class="list-flickr__img" src="img/B/flickr/item1.jpg" alt=""></a></li>
+        <li class="list-flickr__item"><a class="list-flickr__link" href="#"><img class="list-flickr__img" src="img/B/flickr/item2.jpg" alt=""></a></li>
+        <li class="list-flickr__item"><a class="list-flickr__link" href="#"><img class="list-flickr__img" src="img/B/flickr/item3.jpg" alt=""></a></li>
+        <li class="list-flickr__item"><a class="list-flickr__link" href="#"><img class="list-flickr__img" src="img/B/flickr/item4.jpg" alt=""></a></li>
+        <li class="list-flickr__item"><a class="list-flickr__link" href="#"><img class="list-flickr__img" src="img/B/flickr/item5.jpg" alt=""></a></li>
+        <li class="list-flickr__item"><a class="list-flickr__link" href="#"><img class="list-flickr__img" src="img/B/flickr/item6.jpg" alt=""></a></li>
+      </ul>
+    </div>
+    <!-- - footer block 4 -->
+  </div>
+  <!-- - HIDDEN -->
+  </div>
+  <!-- - footer content-->
+  <!-- footer copyright -->
+  <div class="page-footer__copyright">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12"><small class="copyright-text">© 2017 Toby Sullivan</small></div>
+      </div>
+    </div>
+  </div>
+  <!-- - footer copyright -->
+</footer>
+<!-- - PAGE FOOTER -->
+<!-- Common JS-->
+<script src="js/modernizr.custom.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.waypoints.min.js"></script>
+<script src="js/jquery.counterup.min.js"></script>
+<script src="js/jquery.easing.min.js"></script>
+<script src="js/jquery.easeScroll.js"></script>
+<script src="js/swiper.jquery.min.js"></script>
+<script src="js/imagesloaded.pkgd.min.js"></script>
+<script src="js/masonry.pkgd.min.js"></script>
+<script src="js/isotope.pkgd.min.js"></script>
+<script src="js/jarallax.min.js"></script>
+<script src="js/jquery.equalheights.min.js"></script>
+<script src="js/ion.tabs.min.js"></script>
+<script src="js/maplace.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3gFKhVywUkygSxQEBdGVrI5-ZRrdjueA"></script>
+<script src="js/common.js"></script>
+<!-- Custom JS-->
+<script src="js/scripts-B.js"></script>
+</body>
+</html>
