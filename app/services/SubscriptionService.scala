@@ -1,6 +1,7 @@
 package services
 
 import java.util.UUID
+import javax.inject._
 
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
@@ -10,10 +11,10 @@ import org.joda.time.{DateTime, DateTimeZone}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
-object SubscriptionService {
-  private val tableName = "tailored.monthly.subscriptions"
-  private val dynamoDbRegion = Regions.US_WEST_2
+@Singleton
+class SubscriptionService @Inject() (val configuration: play.api.Configuration) {
+  private val tableName = configuration.getString("aws.dynamodb.subscriptionTable").get
+  private val dynamoDbRegion = Regions.fromName(configuration.getString("aws.region").get)
 
   def create(
               name: String,

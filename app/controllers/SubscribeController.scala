@@ -12,7 +12,7 @@ import scala.concurrent.Future
   * Created by toby on 2016-12-20.
   */
 @Singleton
-class SubscribeController @Inject() (val configuration: play.api.Configuration) extends Controller {
+class SubscribeController @Inject() (val configuration: play.api.Configuration, val subcriptionSvc: SubscriptionService) extends Controller {
 
   def index = Action { implicit request =>
     val stripePublicKey = configuration.getString("stripe.publicKey")
@@ -53,7 +53,7 @@ class SubscribeController @Inject() (val configuration: play.api.Configuration) 
     } else if (oStripeToken.isEmpty) {
       Future.successful(BadRequest("Payment must be provided"))
     } else {
-      val f = SubscriptionService.create(
+      val f = subcriptionSvc.create(
         name = oName.get,
         size = oSize.get,
         email = oEmail.get,
