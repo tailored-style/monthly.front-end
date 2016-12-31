@@ -40,7 +40,9 @@ class SubscriptionService @Inject() (val configuration: play.api.Configuration) 
     }
     item.put("AddressName", new AttributeValue(addressName))
     item.put("AddressLine1", new AttributeValue(addressLine1))
-    item.put("AddressLine2", new AttributeValue(addressLine2.getOrElse("")))
+    if (addressLine2.isDefined) {
+      item.put("AddressLine2", new AttributeValue(addressLine2.get))
+    }
     item.put("AddressCity", new AttributeValue(addressCity))
     item.put("AddressProvince", new AttributeValue(addressProvince))
     item.put("AddressPostalCode", new AttributeValue(addressPostalCode))
