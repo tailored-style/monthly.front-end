@@ -1,6 +1,13 @@
 @(name: String)
 
 @main("Registration Complete") {
-  <h1>Thank you, @{name}!</h1>
-  <p>You are now subscribed. Enjoy your beautiful new shirts!</p>
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="jumbotron">
+        <h1>Thank you, @{name}!</h1>
+        <p>Enjoy your beautiful new shirts!</p>
+        <p>You will receive an email with more information about your subscription.</p>
+      </div>
+    </div>
+  </div>
 }

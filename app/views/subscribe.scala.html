@@ -1,66 +1,135 @@
 @(stripePublicKey: String)
 
 @main("Subscribe") {
-  <h1>Subscribe to Tailored Style</h1>
+  <div class="row">
+    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+      <h1 class="text-center">Subscribe to Tailored</h1>
+    </div>
+  </div>
+  <hr>
   <form action="/subscribe" method="post">
-    <h2>About You</h2>
-    <p>Preferred Name: <input name="name" type="text"></p>
-    <p>Shirt size:
-      <select name="shirt-size">
-        <option>XS</option>
-        <option>S</option>
-        <option selected="selected">M</option>
-        <option>L</option>
-        <option>XL</option>
-        <option>XXL</option>
-      </select>
-    </p>
+    <div class="col-sm-8 col-sm-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">About You</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label class="control-label">Preferred Name</label>
+            <input class="form-control" name="name" type="text" placeholder="Mike">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Shirt size</label>
+            <select class="form-control" name="shirt-size">
+              <option value="XS">Extra Small (XS)</option>
+              <option value="S">Small (S)</option>
+              <option value="M" selected="selected">Medium (M)</option>
+              <option value="L">Large (L)</option>
+              <option value="XL">Extra Large (XL)</option>
+              <option value="XXL">2x Extra Large (XXL)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <h2>Contact Details</h2>
-    <p>Email address: <input name="email" type="email"></p>
-    <p>SMS: <input name="sms-number" type="text"></p>
+    <div class="col-sm-8 col-sm-offset-2">
 
-    <h2>Shipping Address</h2>
-    <p>Full Name: <input name="address-name" type="text"></p>
-    <p>Address Line 1: <input name="address-line-1" type="text"></p>
-    <p>Address Line 2: <input name="address-line-2" type="text"></p>
-    <p>City: <input name="address-city" type="text" value="Vancouver"></p>
-    <p>Province:
-      <select name="address-province">
-        <option value="AB">Alberta</option>
-        <option value="BC" selected="selected">British Columbia</option>
-        <option value="MA">Manitoba</option>
-        <option value="NB">New Brunswick</option>
-        <option value="NL">Newfoundland & Labrador</option>
-        <option value="NT">North West Territories</option>
-        <option value="NS">Nova Scotia</option>
-        <option value="NU">Nunavut</option>
-        <option value="ON">Ontario</option>
-        <option value="PE">Prince Edward Island</option>
-        <option value="QC">Quebec</option>
-        <option value="SK">Saskatchewan</option>
-        <option value="YT">Yukon</option>
-      </select>
-    </p>
-    <p>Postal Code: <input name="address-postal-code" type="text"></p>
-    <p>Country:
-      <select name="address-country">
-        <option value="CA" selected="selected">Canada</option>
-      </select>
-    </p>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Contact Details</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label class="control-label">Email Address</label>
+            <input class="form-control" name="email" type="email" placeholder="mikeking@@example.com">
+          </div>
+          <div class="form-group">
+            <label class="control-label">SMS</label>
+            <input class="form-control" name="sms-number" type="text" placeholder="867-445-0369">
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <h2>Payment</h2>
-    <p>Provide your payment information to start your subscription.</p>
-    <script
-        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="@stripePublicKey"
-        data-name="Tailored Style - Shirt of the Month"
-        data-description="Monthly Subscription. A month-by-month subscription to our Shirt of the Month.
+    <div class="col-sm-8 col-sm-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Shipping Address</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label class="control-label">Full Name</label>
+            <input class="form-control" name="address-name" type="text" placeholder="Michael King">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Address Line 1</label>
+            <input class="form-control" name="address-line-1" type="text" placeholder="1076 Alaska Hwy">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Address Line 2</label>
+            <input class="form-control" name="address-line-2" type="text" placeholder="Apt 204">
+          </div>
+          <div class="form-group">
+            <label class="control-label">City</label>
+            <input class="form-control" name="address-city" type="text" placeholder="Fort Nelson">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Province</label>
+            <select class="form-control" name="address-province">
+              <option value="AB">Alberta</option>
+              <option value="BC" selected="selected">British Columbia</option>
+              <option value="MA">Manitoba</option>
+              <option value="NB">New Brunswick</option>
+              <option value="NL">Newfoundland & Labrador</option>
+              <option value="NT">North West Territories</option>
+              <option value="NS">Nova Scotia</option>
+              <option value="NU">Nunavut</option>
+              <option value="ON">Ontario</option>
+              <option value="PE">Prince Edward Island</option>
+              <option value="QC">Quebec</option>
+              <option value="SK">Saskatchewan</option>
+              <option value="YT">Yukon</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Postal Code</label>
+            <input class="form-control" name="address-postal-code" type="text" placeholder="V0C 1C0">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Country</label>
+            <select class="form-control" name="address-country">
+              <option value="CA" selected="selected">Canada</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-8 col-sm-offset-2">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Billing Details</h3>
+        </div>
+        <div class="panel-body">
+          <p class="text-center">Provide your payment information to complete your purchase.</p>
+          <div class="form-group text-center">
+            <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="@stripePublicKey"
+                data-name="Tailored Style - Shirt of the Month"
+                data-description="Monthly Subscription. A month-by-month subscription to our Shirt of the Month.
           You will be charged this amount on a recurring monthly basis."
-        data-currency="cad"
-        data-locale="en"
-        data-allow-remember-me="false"
-        data-panel-label="Subscribe">
-    </script>
+                data-currency="cad"
+                data-locale="en"
+                data-allow-remember-me="false"
+                data-panel-label="Subscribe">
+            </script>
+          </div>
+          <p class="text-center"><em><nobr>Payment information is</nobr> collected and processed <nobr>securely with <a href="https://stripe.com/" target="_blank">Stripe&trade;</a>.</nobr></em></p>
+        </div>
+      </div>
+    </div>
+
   </form>
 }
