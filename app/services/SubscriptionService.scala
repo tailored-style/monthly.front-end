@@ -6,15 +6,39 @@ import javax.inject._
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.amazonaws.services.dynamodbv2.{AmazonDynamoDB, AmazonDynamoDBClientBuilder}
+import com.amazonaws.services.sns.{AmazonSNS, AmazonSNSClientBuilder}
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 @Singleton
 class SubscriptionService @Inject() (val configuration: play.api.Configuration) {
   private val tableName = configuration.getString("aws.dynamodb.subscriptionTable").get
-  private val dynamoDbRegion = Regions.fromName(configuration.getString("aws.region").get)
+  private val awsRegion = Regions.fromName(configuration.getString("aws.region").get)
+  private val snsTopic = configuration.getString("aws.sns.topics.subscriptionCreated").get
+
+  case class Subscription(
+                            id: String,
+                            name: String,
+                            size: String,
+                            email: String,
+                            smsNumber: Option[String],
+                            address: Address,
+                            stripeToken: String,
+                            signupDate: DateTime
+                            )
+
+  case class Address(
+                       fullName: String,
+                       line1: String,
+                       line2: Option[String],
+                       city: String,
+                       province: String,
+                       postalCode: String,
+                       country: String
+                       )
 
   def create(
               name: String,
@@ -30,37 +54,88 @@ class SubscriptionService @Inject() (val configuration: play.api.Configuration) 
               addressCountry: String,
               stripeToken: String
             )(implicit executionContext: ExecutionContext): Future[Unit] = {
-    val item: java.util.Map[String, AttributeValue] = new java.util.HashMap[String, AttributeValue]()
-    item.put("ID", new AttributeValue(UUID.randomUUID().toString))
-    item.put("Name", new AttributeValue(name))
-    item.put("Email", new AttributeValue(email))
-    item.put("Size", new AttributeValue(size))
-    if (smsNumber.isDefined) {
-      item.put("SMS", new AttributeValue(smsNumber.get))
-    }
-    item.put("AddressName", new AttributeValue(addressName))
-    item.put("AddressLine1", new AttributeValue(addressLine1))
-    if (addressLine2.isDefined) {
-      item.put("AddressLine2", new AttributeValue(addressLine2.get))
-    }
-    item.put("AddressCity", new AttributeValue(addressCity))
-    item.put("AddressProvince", new AttributeValue(addressProvince))
-    item.put("AddressPostalCode", new AttributeValue(addressPostalCode))
-    item.put("AddressCountry", new AttributeValue(addressCountry))
-    item.put("StripeToken", new AttributeValue(stripeToken))
 
-    val signupDate = DateTime.now(DateTimeZone.UTC)
-    val fmt = ISODateTimeFormat.dateTime()
-    item.put("SignupDate", new AttributeValue(fmt.print(signupDate)))
+    val address = Address(
+      fullName = addressName,
+      line1 = addressLine1,
+      line2 = addressLine2,
+      city = addressCity,
+      province = addressProvince,
+      postalCode = addressPostalCode,
+      country = addressCountry
+    )
+    val subscription = Subscription(
+      id = UUID.randomUUID().toString,
+      name = name,
+      size = size,
+      email = email,
+      smsNumber = smsNumber,
+      address = address,
+      stripeToken = stripeToken,
+      signupDate = DateTime.now(DateTimeZone.UTC)
+    )
 
     Future {
-      dynamoDbClient.putItem(tableName, item)
+      createDynamoDbRecord(subscription)
+    }.andThen {
+      case Success(_) =>
+        notifySnsTopic(subscription)
+      case Failure(e) =>
+
     }
+
   }
 
-  private var dynamoDbClient: AmazonDynamoDB = {
+  private val dynamoDbClient: AmazonDynamoDB = {
     AmazonDynamoDBClientBuilder.standard()
-        .withRegion(dynamoDbRegion)
+        .withRegion(awsRegion)
         .build()
+  }
+
+  private val snsClient: AmazonSNS = {
+    AmazonSNSClientBuilder.standard()
+        .withRegion(awsRegion)
+        .build()
+  }
+
+  private def createDynamoDbRecord(subscription: Subscription): Unit = {
+    val item: java.util.Map[String, AttributeValue] = new java.util.HashMap[String, AttributeValue]()
+    item.put("ID", new AttributeValue(UUID.randomUUID().toString))
+    item.put("Name", new AttributeValue(subscription.name))
+    item.put("Email", new AttributeValue(subscription.email))
+    item.put("Size", new AttributeValue(subscription.size))
+    if (subscription.smsNumber.isDefined) {
+      item.put("SMS", new AttributeValue(subscription.smsNumber.get))
+    }
+    item.put("AddressName", new AttributeValue(subscription.address.fullName))
+    item.put("AddressLine1", new AttributeValue(subscription.address.line1))
+    if (subscription.address.line2.isDefined) {
+      item.put("AddressLine2", new AttributeValue(subscription.address.line2.get))
+    }
+    item.put("AddressCity", new AttributeValue(subscription.address.city))
+    item.put("AddressProvince", new AttributeValue(subscription.address.province))
+    item.put("AddressPostalCode", new AttributeValue(subscription.address.postalCode))
+    item.put("AddressCountry", new AttributeValue(subscription.address.country))
+    item.put("StripeToken", new AttributeValue(subscription.stripeToken))
+
+    val signupDate = subscription.signupDate
+    val fmt = ISODateTimeFormat.dateTimeNoMillis()
+    item.put("SignupDate", new AttributeValue(fmt.print(signupDate)))
+
+    dynamoDbClient.putItem(tableName, item)
+  }
+
+  private def notifySnsTopic(subscription: Subscription): Unit = {
+    val content =
+      s"""
+        |{
+        |  "subscription": {
+        |    "id": "${subscription.id}",
+        |    "name": "${subscription.name}",
+        |    "email": "${subscription.email}"
+        |  }
+        |}
+      """.stripMargin
+    snsClient.publish(snsTopic, content)
   }
 }
