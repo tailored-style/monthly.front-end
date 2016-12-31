@@ -1,4 +1,4 @@
-name := """sotm-fe"""
+name := "sotm-fe"
 organization := "style.tailored"
 
 version := "1.0-SNAPSHOT"
