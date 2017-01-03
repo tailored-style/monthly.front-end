@@ -1,11 +1,11 @@
-@(name: String)
+@(name: String, gaTrackingCode: Option[String])
 
-@main("Registration Complete") {
+@main("Registration Complete", gaTrackingCode) {
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="jumbotron">
         <h1>Thank you, @{name}!</h1>
-        <p>Enjoy your beautiful new shirts!</p>
+        <p> Enjoy your beautiful new shirts!</p>
         <p>You will receive an email with more information about your subscription.</p>
       </div>
     </div>

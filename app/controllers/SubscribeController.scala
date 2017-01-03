@@ -13,10 +13,11 @@ import scala.concurrent.Future
   */
 @Singleton
 class SubscribeController @Inject() (val configuration: play.api.Configuration, val subcriptionSvc: SubscriptionService) extends Controller {
+  val gaTrackingId = configuration.getString("google.analytics.trackingId")
 
   def index = Action { implicit request =>
     val stripePublicKey = configuration.getString("stripe.publicKey")
-    Ok(views.html.subscribe(stripePublicKey.get))
+    Ok(views.html.subscribe(stripePublicKey.get, gaTrackingId))
   }
 
   def create = Action.async(parse.tolerantFormUrlEncoded) { implicit request =>
@@ -69,7 +70,7 @@ class SubscribeController @Inject() (val configuration: play.api.Configuration, 
       )
 
       f.map { _ =>
-        Ok(views.html.thankyou(oName.get))
+        Ok(views.html.thankyou(oName.get, gaTrackingId))
       }
     }
   }
