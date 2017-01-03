@@ -4,7 +4,7 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
-@(title: String)(content: Html)
+@(title: String, gaTrackingCode: Option[String])(content: Html)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,5 +46,7 @@
   <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
   <script src="@routes.Assets.versioned("bootstrap/js/jquery-3.1.1.min.js")" type="text/javascript"></script>
   <script src="@routes.Assets.versioned("bootstrap/js/bootstrap.js")" type="text/javascript"></script>
+  @ga_tracking(gaTrackingCode)
+
 </body>
 </html>
