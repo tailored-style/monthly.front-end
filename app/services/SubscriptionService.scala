@@ -100,7 +100,7 @@ class SubscriptionService @Inject() (val configuration: play.api.Configuration) 
 
   private def createDynamoDbRecord(subscription: Subscription): Unit = {
     val item: java.util.Map[String, AttributeValue] = new java.util.HashMap[String, AttributeValue]()
-    item.put("ID", new AttributeValue(UUID.randomUUID().toString))
+    item.put("ID", new AttributeValue(subscription.id))
     item.put("Name", new AttributeValue(subscription.name))
     item.put("Email", new AttributeValue(subscription.email))
     item.put("Size", new AttributeValue(subscription.size))
@@ -130,9 +130,7 @@ class SubscriptionService @Inject() (val configuration: play.api.Configuration) 
       s"""
         |{
         |  "subscription": {
-        |    "id": "${subscription.id}",
-        |    "name": "${subscription.name}",
-        |    "email": "${subscription.email}"
+        |    "id": "${subscription.id}"
         |  }
         |}
       """.stripMargin
