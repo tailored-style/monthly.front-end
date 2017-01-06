@@ -39,8 +39,6 @@ class SubscribeController @Inject() (val configuration: play.api.Configuration, 
       Future.successful(BadRequest("Name must be provided"))
     } else if (oEmail.isEmpty) {
       Future.successful(BadRequest("Email must be provided"))
-    } else if (oSize.isEmpty) {
-      Future.successful(BadRequest("Size must be provided"))
     } else if (oAddressName.isEmpty) {
       Future.successful(BadRequest("Address Name must be provided"))
     } else if (oAddressLine1.isEmpty) {
@@ -56,7 +54,7 @@ class SubscribeController @Inject() (val configuration: play.api.Configuration, 
     } else {
       val f = subcriptionSvc.create(
         name = oName.get,
-        size = oSize.get,
+        size = oSize,
         email = oEmail.get,
         smsNumber = oSms,
         addressName = oAddressName.get,

@@ -22,7 +22,7 @@ class SubscriptionService @Inject() (val configuration: play.api.Configuration) 
   case class Subscription(
                             id: String,
                             name: String,
-                            size: String,
+                            size: Option[String],
                             email: String,
                             smsNumber: Option[String],
                             address: Address,
@@ -42,7 +42,7 @@ class SubscriptionService @Inject() (val configuration: play.api.Configuration) 
 
   def create(
               name: String,
-              size: String,
+              size: Option[String],
               email: String,
               smsNumber: Option[String],
               addressName: String,
@@ -103,7 +103,9 @@ class SubscriptionService @Inject() (val configuration: play.api.Configuration) 
     item.put("ID", new AttributeValue(subscription.id))
     item.put("Name", new AttributeValue(subscription.name))
     item.put("Email", new AttributeValue(subscription.email))
-    item.put("Size", new AttributeValue(subscription.size))
+    if (subscription.size.isDefined) {
+      item.put("Size", new AttributeValue(subscription.size.get))
+    }
     if (subscription.smsNumber.isDefined) {
       item.put("SMS", new AttributeValue(subscription.smsNumber.get))
     }
