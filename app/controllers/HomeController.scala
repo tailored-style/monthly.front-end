@@ -10,7 +10,7 @@ import play.api.mvc._
  */
 @Singleton
 class HomeController @Inject() (val configuration: play.api.Configuration) extends Controller {
-  val gaTrackingId = configuration.getString("google.analytics.trackingId")
+  private val gaTrackingId = configuration.getString("google.analytics.trackingId")
 
   /**
    * Create an Action to render an HTML page.

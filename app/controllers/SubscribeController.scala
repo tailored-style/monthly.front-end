@@ -13,7 +13,7 @@ import scala.concurrent.Future
   */
 @Singleton
 class SubscribeController @Inject() (val configuration: play.api.Configuration, val subcriptionSvc: SubscriptionService) extends Controller {
-  val gaTrackingId = configuration.getString("google.analytics.trackingId")
+  private val gaTrackingId = configuration.getString("google.analytics.trackingId")
 
   def index = Action { implicit request =>
     val stripePublicKey = configuration.getString("stripe.publicKey")

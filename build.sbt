@@ -9,7 +9,8 @@ scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
-  "com.amazonaws" % "aws-java-sdk" % "1.11.70"
+  "com.amazonaws" % "aws-java-sdk" % "1.11.70",
+  "org.cryptonode.jncryptor" % "jncryptor" % "1.2.0"
 )
 
 // Adds additional packages into Twirl
