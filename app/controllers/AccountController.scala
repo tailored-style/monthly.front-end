@@ -1,6 +1,7 @@
 package controllers
 
 import java.security.SecureRandom
+import java.util.Base64
 import javax.inject.Inject
 
 import com.google.inject.Singleton
@@ -47,9 +48,9 @@ class AccountController  @Inject() (val configuration: play.api.Configuration, v
   def sample = Action { implicit request =>
     val data = "test@example.com".getBytes
     val encrypted = cryptor.encryptData(data, secretKey.toCharArray)
-    val encryptedHex = encrypted.map("%02X" format _).mkString
+    val key = Base64.getUrlEncoder.encodeToString(encrypted)
 
-    Ok(s"Account Key: $encryptedHex")
+    Ok(s"Account Key: $key")
   }
 
 
