@@ -22,7 +22,7 @@ class AccountController @Inject() (
 
     oAccountKey match {
       case None => BadRequest("Could not find accountKey. Required param.")
-      case Some(_) => Ok(views.html.measurements())
+      case Some(key) => Ok(views.html.measurements(key))
     }
   }
 
