@@ -9,15 +9,18 @@ import com.amazonaws.services.dynamodbv2.{AmazonDynamoDB, AmazonDynamoDBClientBu
 import com.amazonaws.services.sns.{AmazonSNS, AmazonSNSClientBuilder}
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
+import services.integration.IntegrationConfigsService
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 @Singleton
-class SubscriptionService @Inject() (val configuration: play.api.Configuration) {
-  private val tableName = configuration.getString("aws.dynamodb.subscriptionTable").get
-  private val awsRegion = Regions.fromName(configuration.getString("aws.region").get)
-  private val snsTopic = configuration.getString("aws.sns.topics.subscriptionCreated").get
+class SubscriptionService @Inject() (
+                                      val integrations: IntegrationConfigsService
+                                    ) {
+  private val tableName = integrations.getString(integrations.AWS_DYNAMODB_SUBSCRIPTIONS_TABLE_NAME).get
+  private val awsRegion = Regions.fromName(integrations.getString(integrations.AWS_REGION).get)
+  private val snsTopic = integrations.getString(integrations.AWS_SNS_TOPICS_SUBSCRIPTION_CREATED).get
 
   case class Subscription(
                             id: String,

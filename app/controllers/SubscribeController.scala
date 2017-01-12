@@ -2,25 +2,27 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.mvc.{Action, Controller, Result}
+import play.api.mvc.{Action, Controller}
 import services.SubscriptionService
 import play.api.libs.concurrent.Execution.Implicits._
+import services.integration.IntegrationConfigsService
+import services.integration.IntegrationConfigsService._
 
 import scala.concurrent.Future
 
-/**
-  * Created by toby on 2016-12-20.
-  */
 @Singleton
-class SubscribeController @Inject() (val configuration: play.api.Configuration, val subcriptionSvc: SubscriptionService) extends Controller {
-  private val gaTrackingId = configuration.getString("google.analytics.trackingId")
+class SubscribeController @Inject() (
+                                      val integrations: IntegrationConfigsService,
+                                      val subscriptionSvc: SubscriptionService
+                                    ) extends Controller {
+  private val gaTrackingId = integrations.getString(GOOGLE_ANALYTICS_TRACKING_ID)
 
-  def index = Action { implicit request =>
-    val stripePublicKey = configuration.getString("stripe.publicKey")
+  def index = Action {
+    val stripePublicKey = integrations.getString(STRIPE_PUBLIC_KEY)
     Ok(views.html.subscribe(stripePublicKey.get, gaTrackingId))
   }
 
-  def create = Action.async(parse.tolerantFormUrlEncoded) { implicit request =>
+  def create: Action[Map[String, Seq[String]]] = Action.async(parse.tolerantFormUrlEncoded) { implicit request =>
     val formData = request.body
     val oName = formData.get("name").map(_.head).filterNot(_.isEmpty)
     val oEmail = formData.get("email").map(_.head).filterNot(_.isEmpty)
@@ -52,7 +54,7 @@ class SubscribeController @Inject() (val configuration: play.api.Configuration, 
     } else if (oStripeToken.isEmpty) {
       Future.successful(BadRequest("Payment must be provided"))
     } else {
-      val f = subcriptionSvc.create(
+      val f = subscriptionSvc.create(
         name = oName.get,
         size = oSize,
         email = oEmail.get,

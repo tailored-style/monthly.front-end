@@ -4,36 +4,19 @@ import javax.inject.Inject
 
 import com.google.inject.Singleton
 import play.api.mvc.{Action, Controller}
-import services.{EncryptionService, SubscriptionService}
+import services.EncryptionService
+import services.integration.IntegrationConfigsService
+import services.integration.IntegrationConfigsService.GOOGLE_ANALYTICS_TRACKING_ID
 
-/**
-  * Created by toby on 2017-01-11.
-  */
 @Singleton
-class AccountController  @Inject() (
-                                     val configuration: play.api.Configuration,
-                                     val subcriptionSvc: SubscriptionService,
+class AccountController @Inject() (
+                                     val integrations: IntegrationConfigsService,
                                      val encryptSvc: EncryptionService
                                    ) extends Controller {
-  private val gaTrackingId = configuration.getString("google.analytics.trackingId")
+  private val gaTrackingId = integrations.getString(GOOGLE_ANALYTICS_TRACKING_ID)
 
-  def measurements = Action { implicit request =>
-    val oAccountId = request.getQueryString("accountKey").map(encryptSvc.decrypt)
-
-    oAccountId match {
-      case None => InternalServerError("Failed to recognize accountKey")
-      case Some(key) =>{
-        Ok(s"Received key: $key")
-//        Ok(views.html.measurements(gaTrackingId))
-      }
-    }
-
-  }
-
-  def sample = Action { implicit request =>
-    val key = encryptSvc.encrypt("test@example.com")
-
-    Ok(s"Account Key: $key")
+  def measurements = Action {
+    Ok(views.html.measurements(gaTrackingId))
   }
 
 
