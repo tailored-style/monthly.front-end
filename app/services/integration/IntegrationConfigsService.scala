@@ -6,7 +6,7 @@ import services.integration.IntegrationConfigsService.ConfigKey
 
 
 object IntegrationConfigsService {
-  sealed case class ConfigKey(private[services] val key: String) extends AnyVal
+  sealed case class ConfigKey(key: String)
 
   val STRIPE_PUBLIC_KEY = ConfigKey("stripe.publicKey")
   val GOOGLE_ANALYTICS_TRACKING_ID = ConfigKey("google.analytics.trackingId")

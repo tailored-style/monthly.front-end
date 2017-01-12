@@ -10,6 +10,7 @@ import com.amazonaws.services.sns.{AmazonSNS, AmazonSNSClientBuilder}
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 import services.integration.IntegrationConfigsService
+import services.integration.IntegrationConfigsService._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
@@ -18,9 +19,9 @@ import scala.util.{Failure, Success}
 class SubscriptionService @Inject() (
                                       val integrations: IntegrationConfigsService
                                     ) {
-  private val tableName = integrations.getString(integrations.AWS_DYNAMODB_SUBSCRIPTIONS_TABLE_NAME).get
-  private val awsRegion = Regions.fromName(integrations.getString(integrations.AWS_REGION).get)
-  private val snsTopic = integrations.getString(integrations.AWS_SNS_TOPICS_SUBSCRIPTION_CREATED).get
+  private val tableName = integrations.getString(AWS_DYNAMODB_SUBSCRIPTIONS_TABLE_NAME).get
+  private val awsRegion = Regions.fromName(integrations.getString(AWS_REGION).get)
+  private val snsTopic = integrations.getString(AWS_SNS_TOPICS_SUBSCRIPTION_CREATED).get
 
   case class Subscription(
                             id: String,
@@ -56,7 +57,7 @@ class SubscriptionService @Inject() (
               addressPostalCode: String,
               addressCountry: String,
               stripeToken: String
-            )(implicit executionContext: ExecutionContext): Future[Unit] = {
+            )(implicit executionContext: ExecutionContext): Future[Subscription] = {
 
     val address = Address(
       fullName = addressName,
@@ -78,15 +79,16 @@ class SubscriptionService @Inject() (
       signupDate = DateTime.now(DateTimeZone.UTC)
     )
 
-    Future {
+    val fDynamoDBWrite = Future {
       createDynamoDbRecord(subscription)
-    }.andThen {
-      case Success(_) =>
-        notifySnsTopic(subscription)
-      case Failure(e) =>
-
+      subscription
     }
 
+    fDynamoDBWrite.onSuccess {
+      case sub: Subscription => notifySnsTopic(sub)
+    }
+
+    fDynamoDBWrite
   }
 
   private val dynamoDbClient: AmazonDynamoDB = {

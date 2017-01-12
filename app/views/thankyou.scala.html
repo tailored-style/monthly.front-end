@@ -1,12 +1,13 @@
-@(name: String, gaTrackingCode: Option[String])
+@(name: String, accountKey: String)(implicit context: views.Context)
 
-@main("Registration Complete", gaTrackingCode) {
+@main("Registration Complete") {
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="jumbotron">
         <h1>Thank you, @{name}!</h1>
         <p> Enjoy your beautiful new shirts! We'll be in touch very soon to collect your sizing information. Watch your email!</p>
         <p>You will also receive an email with more information about your subscription.</p>
+        <p><a href="/account/measurements?accountKey=@{accountKey}" class="btn btn-large btn-default">Update my measurements</a> </p>
       </div>
     </div>
   </div>

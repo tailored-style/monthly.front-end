@@ -5,6 +5,7 @@ import javax.inject._
 import play.api.mvc._
 import services.integration.IntegrationConfigsService
 import services.integration.IntegrationConfigsService.GOOGLE_ANALYTICS_TRACKING_ID
+import views.Context
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -13,6 +14,7 @@ import services.integration.IntegrationConfigsService.GOOGLE_ANALYTICS_TRACKING_
 @Singleton
 class HomeController @Inject() (val integration: IntegrationConfigsService) extends Controller {
   private val gaTrackingId = integration.getString(GOOGLE_ANALYTICS_TRACKING_ID)
+  implicit private val viewContext = Context(gaTrackingId)
 
   /**
    * Create an Action to render an HTML page.
@@ -22,7 +24,7 @@ class HomeController @Inject() (val integration: IntegrationConfigsService) exte
    * a path of `/`.
    */
   def index = Action {
-    Ok(views.html.index(gaTrackingId))
+    Ok(views.html.index())
   }
 
 }

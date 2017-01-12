@@ -3,23 +3,26 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import play.api.mvc.{Action, Controller}
-import services.SubscriptionService
+import services.{EncryptionService, SubscriptionService}
 import play.api.libs.concurrent.Execution.Implicits._
 import services.integration.IntegrationConfigsService
 import services.integration.IntegrationConfigsService._
+import views.Context
 
 import scala.concurrent.Future
 
 @Singleton
 class SubscribeController @Inject() (
                                       val integrations: IntegrationConfigsService,
-                                      val subscriptionSvc: SubscriptionService
+                                      val subscriptionSvc: SubscriptionService,
+                                      val encryptionSvc: EncryptionService
                                     ) extends Controller {
   private val gaTrackingId = integrations.getString(GOOGLE_ANALYTICS_TRACKING_ID)
+  implicit private val viewContext = Context(gaTrackingId)
 
   def index = Action {
     val stripePublicKey = integrations.getString(STRIPE_PUBLIC_KEY)
-    Ok(views.html.subscribe(stripePublicKey.get, gaTrackingId))
+    Ok(views.html.subscribe(stripePublicKey.get))
   }
 
   def create: Action[Map[String, Seq[String]]] = Action.async(parse.tolerantFormUrlEncoded) { implicit request =>
@@ -69,8 +72,10 @@ class SubscribeController @Inject() (
         stripeToken = oStripeToken.get
       )
 
-      f.map { _ =>
-        Ok(views.html.thankyou(oName.get, gaTrackingId))
+      f.map { sub =>
+
+        val accountKey = encryptionSvc.encrypt(sub.id)
+        Ok(views.html.thankyou(oName.get, accountKey))
       }
     }
   }
