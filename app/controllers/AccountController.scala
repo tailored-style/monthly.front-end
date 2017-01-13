@@ -26,5 +26,12 @@ class AccountController @Inject() (
     }
   }
 
+  def postMeasurements = Action(parse.tolerantFormUrlEncoded) { implicit request =>
+    val formData = request.body
+    val oAccountKey = formData.get("account-key").map(_.head)
+
+    Ok(views.html.measurements(oAccountKey.get))
+  }
+
 
 }
